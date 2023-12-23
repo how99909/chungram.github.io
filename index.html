@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>투표 애플리케이션</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>당신의 선택은?</h1>
+
+  <form id="votingForm">
+    <label>
+      <input type="radio" name="vote" value="1"> 옵션 1
+    </label>
+    <label>
+      <input type="radio" name="vote" value="2"> 옵션 2
+    </label>
+    <label>
+      <input type="radio" name="vote" value="3"> 옵션 3
+    </label>
+    <button type="button" onclick="submitVote()">투표하기</button>
+  </form>
+
+  <script>
+    function submitVote() {
+      // 선택된 옵션 가져오기
+      const selectedOption = document.querySelector('input[name="vote"]:checked');
+
+      if (!selectedOption) {
+        alert('옵션을 선택하세요.');
+        return;
+      }
+
+      const voteValue = selectedOption.value;
+
+      // 서버로 전송할 데이터
+      const data = { vote: voteValue };
+
+      // 서버에 데이터 전송
+      fetch('http://localhost:18080/vote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(result => {
+        console.log('서버 응답:', result);
+      })
+      .catch(error => {
+        console.error('에러 발생:', error);
+      });
+    }
+  </script>
+</body>
+</html>
